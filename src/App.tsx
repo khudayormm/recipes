@@ -1,25 +1,31 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 
+
 import './App.css'
 import MaterialSymbolsFavoriteRounded from './components/MaterialSymbolsFavoriteRounded';
 import MaterialSymbolsFavoriteOutline from './components/MaterialSymbolsFavoriteOutline';
+import { useLocalStorage } from '@mantine/hooks';
+import ModalRecipe from './components/ModalRecipe';
+import { GridLoader } from 'react-spinners'
+import { AnimatePresence, motion } from 'framer-motion';
+import Cats from './components/Cats';
+import Subs from './components/Subs';
 
 function App() {
+  const [catId, setCatId] = useLocalStorage<string>({
+    key: 'cat_id',
+    defaultValue: '',
+  })
+  const [subId, setSubId] = useLocalStorage<string>({
+    key: 'subId',
+    defaultValue: ''
+  })
+
+  const [open, setOpen] = useState<boolean>(false)
   const [query, setQuery] = useState('')
   const [loading, setLoading] = useState(false);
-  const [load, setLoad] = useState(false)
-
-  const [cats, setCats] = useState([]);
-  const [subs, setSubs] = useState([]);
-  const [scats, setScats] = useState([]);
-
-  const [scat, setScat] = useState(1);
-  const [ssub, setSsub] = useState<any>(null);
-
   const [menusData, setMenusData] = useState([]);
-  const [isAll, setIsAll] = useState(true)
-  const [filterData, setFilterData] = useState([]);
 
   const fetchMenu = async () => {
     setLoading(true);
@@ -27,7 +33,6 @@ function App() {
       .get(`${import.meta.env.VITE_SOME_KEY}/site/menu/`)
       .then((res) => {
         setMenusData(res.data);
-        setFilterData(res.data)
       })
       .catch((err) => {
         console.log(err);
@@ -38,71 +43,12 @@ function App() {
   };
 
 
-  const fetchCategory = async () => {
-    await axios
-      .get(`${import.meta.env.VITE_SOME_KEY}/site/menu/category/`)
-      .then((res) => {
-        let arr: any = [];
-        let arr2: any = [];
-        res.data.forEach((item: any) => {
-          if (!item.parent) {
-            arr.push(item);
-          } else {
-            arr2.push(item);
-          }
-        });
-
-        setCats(arr);
-        setSubs(arr2);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   useEffect(() => {
-    fetchCategory();
     fetchMenu();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleFilter = async (id: number) => {
-    setLoad(true)
-    setScat(id)
-    setIsAll(false)
-    const data: any = subs.filter((item: any) => item.parent === id);
-    setScats(data);
-    if (data[0].title === "Barchasi") {
-      const dataa = menusData.filter((item: any) => item.category.id === data[0].id);
-      setFilterData(dataa)
-    } else {
-      setFilterData([])
-    }
-    setLoad(false)
-
-  };
-
-  const handleMenuFilter = async (id: number) => {
-    setLoad(true)
-    setIsAll(false)
-    setSsub(id)
-    const data = menusData.filter((item: any) => item.category.id === id);
-    setFilterData(data)
-    setLoad(false)
-  };
 
 
-  const handleClickAllMenu = () => {
-    setLoad(true)
-    setIsAll(true)
-    setFilterData(menusData)
-    setLoad(false)
-  }
-
-  const handleSearch = (e: any) => {
-    const filtered = menusData.filter((obj: any) => obj.title === e.target.value);
-    setFilterData(filtered)
-  }
 
   const filtereddata =
   query === ''
@@ -114,53 +60,34 @@ function App() {
         .includes(query.toLowerCase().replace(/\s+/g, ''))
     )
 
-
   return (
     <div>
       <div className="flex w-full">
-        <input type="text" placeholder='Searching' onChange={(event) => setQuery(event.target.value)} className="border w-96 px-3 py-2" />
+        <input type="text" placeholder='Qidirish ...' onChange={(event) => setQuery(event.target.value)} className="border w-72 px-3 py-2" />
       </div>
       <div>
-        <ul className="flex flex-row justify-center xl:justify-start flex-wrap gap-2 py-2">
-          {/* <li key={'barcjasiCjaste'} onClick={handleClickAllMenu} className={`${load ? "disCjaste" : ""} listCjasteFilter ${isAll ? "activeCjasteLi" : ''} border`}>Barchasi</li> */}
-          {cats.map((item: any) => item.id !== 1 && (
-            <li className={`${item.id === scat ? "activeCjasteLi" : ""} listCjasteFilter border px-3 w-32 py-2`} key={item.id} onClick={() => handleFilter(item.id)}>{item.title}</li>
-          ))}
-        </ul>
+        <Cats />
       </div>
 
 
       <div>
-        <ul id="menu-flters" className="flex flex-row justify-center xl:justify-start flex-wrap gap-2 pb-4">
-          {/* <li data-filter="*" className="filter-active">All</li>
-          <li data-filter=".filter-starters">Starters</li>
-          <li data-filter=".filter-salads">Salads</li>
-          <li data-filter=".filter-specialty">Specialty</li> */}
-
-          {/* <button
-                  key={item.id}
-                  onClick={() => handleMenuFilter(item.id)}
-                  className={`${item.id === ssub ? "active" : "" } sub-btn`}
-                >
-                  {item.title}
-                </button> */}
-
-          {scats.map((item: any) => (
-            item && item.title !== "Barchasi" ?
-              <li key={item.id} onClick={() => handleMenuFilter(item.id)} data-filter={`.filter${item.id}`} className={` border px-3 w-32 py-2 ${load ? "disCjaste" : ""} ${item.id === ssub ? "filter-active" : ''}`}>
-                {item.title}
-              </li> : ''
-          ))}
-        </ul>
+      <Subs />
       </div>
 
+     <div className="shadow">
+        {loading ? <div className="flex flex-col h-96 justify-center items-center">
+          <div> <GridLoader color='blue'  /> </div>
+          <div className="mt-5 text-blue-500"> Ma'lumotlar yuklanmoqda ... </div>
+          
+        </div> : <div className='overflow-y-scroll h-[70vh] py-2 px-2 xl:pl-0 xl:pr-4'>
+          <div className="flex justify-start gap-x-3 flex-wrap">
+            {menusData.map((item: any, index) => (
+              <motion.div 
+                initial={{ x: 300, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: -300, opacity: 0 }}
 
-
-      <div className="">
-        {filterData.length !== 0 && menusData.length !== 0 ? <div className='overflow-y-scroll h-[70vh] py-2 px-2 xl:pl-0 xl:pr-2'>
-          <div>
-            {filtereddata.length !== 0 ? filtereddata.map((item: any, index) => (
-              <div key={index} className={`border rounded-md my-2  flex justify-between items-center`}>
+                key={index} className={`border w-[405px] rounded-md my-1.5  flex justify-between items-center`}>
                 <div className="flex flex-row justify-start items-center text-left">
                   <div className="h-20 w-20 flex justify-center items-center ml-1">
                   <img src={item.thumbnail} className="rounded-full w-16 h-16" alt="" />
@@ -173,48 +100,27 @@ function App() {
                     </div>
 
                     <div className={`text-xs`}>
-                      <p className="truncate w-64">
+                      <p className="truncate w-48 xl:96">
                       {item.text}
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="px-2">
+                <div className="pr-4">
                   {/* <MaterialSymbolsFavoriteRounded fontSize={24} /> */}
                   <MaterialSymbolsFavoriteOutline fontSize={24} />
                 </div>
 
 
-              </div>
-            )) : filterData.map((item: any, index) => (
-              <div key={index} className={`border rounded-md p-2 my-2  flex justify-between items-center`}>
-                <div className="flex flex-row justify-start items-center text-left">
-                  <img src={item.thumbnail} className="rounded-full w-16 h-16" alt="" />
-
-                  <div className="px-2">
-                    <div className="">
-                      <p>{item.title}</p>
-                      <span className="text-md font-normal">{item.summa && item.summa.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " so'm"}</span>
-                    </div>
-
-                    <div className={`text-xs`}>
-                      {item.text}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mx-2">
-                  {/* <MaterialSymbolsFavoriteRounded fontSize={24} /> */}
-                  <MaterialSymbolsFavoriteOutline fontSize={24} />
-                </div>
-
-
-              </div>
+              </motion.div>
             )) }
           </div>
-        </div> : ''}
+        </div>}
       </div>
+
+
+      <ModalRecipe open={open} setOpen={setOpen} />
     </div>
   )
 }
