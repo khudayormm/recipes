@@ -1,3 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400&family=Quicksand:wght@500&display=swap');
+
+
+* {
+  /* font-family: 'Quicksand', sans-serif; */
+  font-family: 'Poppins', sans-serif;
+}
+
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
