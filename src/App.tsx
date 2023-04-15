@@ -156,13 +156,13 @@ function App() {
 
 
 
-      <div className="overflow-y-scroll h-[70vh]">
-        {filterData.length !== 0 && menusData.length !== 0 ? <div className='border p-2 xl:p-4 rounded-lg'>
+      <div className="">
+        {filterData.length !== 0 && menusData.length !== 0 ? <div className='overflow-y-scroll h-[70vh] py-2 px-2 xl:pl-0 xl:pr-2'>
           <div>
             {filtereddata.length !== 0 ? filtereddata.map((item: any, index) => (
               <div key={index} className={`border rounded-md my-2  flex justify-between items-center`}>
                 <div className="flex flex-row justify-start items-center text-left">
-                  <div className="h-20 w-20 flex justify-center items-center ml-2">
+                  <div className="h-20 w-20 flex justify-center items-center ml-1">
                   <img src={item.thumbnail} className="rounded-full w-16 h-16" alt="" />
                   </div>
 
