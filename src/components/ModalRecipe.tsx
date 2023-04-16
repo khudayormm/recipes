@@ -2,7 +2,7 @@ import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import MaterialSymbolsFavoriteOutline from './MaterialSymbolsFavoriteOutline'
 
-export default function ModalRecipe({ open, setOpen }:any) {
+export default function ModalRecipe({ open, setOpen }:{ open: boolean, setOpen: (value: boolean) => void }) {
   const cancelButtonRef = useRef(null)
 
   return (
