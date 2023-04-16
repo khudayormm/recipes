@@ -14,13 +14,13 @@ function Subs() {
         defaultValue: ''
     })
 
-    const { subcategories } = useAppSelector((state) => state.categorySlice)
+    const { subcategories, loading } = useAppSelector((state) => state.categorySlice)
     
     const [subs, setSubs] = useState<Category[]>([])
     useEffect(() => {
         const data: Category[] = subcategories.filter((item) => item.parent === Number(catId))
         setSubs(data)
-    }, [catId])
+    }, [catId, loading, catId])
 
 
     return (
@@ -31,9 +31,9 @@ function Subs() {
                 </div> : subs.map((item: Category) => (
                     item && item.title !== "Barchasi" ?
                         <motion.li
-                            initial={{ x: 300, opacity: 0 }}
-                            animate={{ x: 0, opacity: 1 }}
-                            exit={{ x: -300, opacity: 0 }}
+                            initial={{ y: 300, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: -300, opacity: 0 }}
 
                             key={item.id} onClick={() => setSubId(String(item.id))} data-filter={`.filter${item.id}`} className={`cursor-default border px-3 w-32 py-2 ${item.id === Number(subId) ? "bg-blue-400 text-white" : ''}`}>
                             {item.title}

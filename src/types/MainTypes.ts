@@ -17,5 +17,5 @@ export interface Recipe {
     text?:            string;
     big_image?:       boolean | null;
     section?:         boolean | null;
-    parent_category?: Category;
+    parent_category: Category | null
 }

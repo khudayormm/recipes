@@ -5,11 +5,7 @@ import MaterialSymbolsFavoriteOutline from './MaterialSymbolsFavoriteOutline'
 
 function List({ item }: { item: Recipe }) {
     return (
-        <motion.div
-            initial={{ x: 300, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: -300, opacity: 0 }}
-            className={`border w-[405px] rounded-md my-1.5  flex justify-between items-center`}>
+        <div className={`border w-[365px] lg:w-[405px] rounded-md my-1.5  flex justify-between items-center`}>
             <div className="flex flex-row justify-start items-center text-left">
                 <div className="h-20 w-20 flex justify-center items-center ml-1">
                     <img src={item.thumbnail} className="rounded-full w-16 h-16" alt="" />
@@ -35,7 +31,7 @@ function List({ item }: { item: Recipe }) {
             </div>
 
 
-        </motion.div>
+        </div>
     )
 }
 

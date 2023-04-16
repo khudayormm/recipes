@@ -1,18 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Category } from '../types/MainTypes'
+import { Category, Recipe } from '../types/MainTypes'
 
 interface initialStateProps {
     category_id: number | null,
     subcategory_id: number | null,
     categories: Category[],
-    subcategories: Category[]
+    subcategories: Category[],
+    recipes: Recipe[],
+    loading: boolean
 }
 
 const initialState: initialStateProps = {
     category_id : null,
     subcategory_id: null,
     categories: [],
-    subcategories: []
+    subcategories: [],
+    recipes: [],
+    loading: false
 }
 
 const categorySlice = createSlice({
@@ -30,10 +34,16 @@ const categorySlice = createSlice({
         },
         changeSubCategories: (state, action: PayloadAction<Category[]>) => {
             state.subcategories = action.payload
+        },
+        changeRecipes: (state, action: PayloadAction<Recipe[]>) => {
+            state.recipes = action.payload
+        },
+        changeLoading: (state, action: PayloadAction<boolean>) => {
+            state.loading = action.payload
         }
     }
 })
 
 
 export default categorySlice.reducer
-export const { changeCategoryId, changeSubCategoryId, changeCategories, changeSubCategories } = categorySlice.actions
+export const { changeCategoryId, changeSubCategoryId, changeCategories, changeSubCategories, changeRecipes, changeLoading } = categorySlice.actions
