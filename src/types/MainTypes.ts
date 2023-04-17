@@ -12,8 +12,8 @@ export interface Recipe {
     title:           string;
     summa?:           number;
     category?:        Category;
-    thumbnail?:       string;
-    image?:           string;
+    thumbnail:       string;
+    image:           string;
     text?:            string;
     big_image?:       boolean | null;
     section?:         boolean | null;

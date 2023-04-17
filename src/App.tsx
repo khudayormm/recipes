@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 import './App.css'
 import { useLocalStorage } from '@mantine/hooks';
 import ModalRecipe from './components/ModalRecipe';
@@ -11,18 +10,19 @@ import List from './components/List';
 import { useAppSelector } from './app/hooks';
 import { AnimatePresence, motion } from 'framer-motion';
 import PhMagnifyingGlassLight from './components/PhMagnifyingGlassLight (1)';
+import IconoirCancel from './components/IconoirCancel';
 
 function App() {
   const [catId, setCatId] = useLocalStorage<string>({
     key: 'cat_id',
     defaultValue: '',
   })
+
   const [subId, setSubId] = useLocalStorage<string>({
     key: 'subId',
     defaultValue: ''
   })
 
-  const [open, setOpen] = useState<boolean>(false)
   const [query, setQuery] = useState<string>('')
   const [list, setList] = useState<Recipe[]>([])
   const { loading, recipes } = useAppSelector((state) => state.categorySlice)
@@ -55,9 +55,12 @@ function App() {
 
   return (
     <div>
-      <div className="mx-3 flex items-center w-full">
-        <PhMagnifyingGlassLight className='absolute left-5 text-slate-400' fontSize={24} />
-        <input type="text" placeholder='Qidirish ...' onChange={(event: React.FormEvent<HTMLInputElement>) => setQuery(event.currentTarget.value)} className="border w-full pl-10 py-2 focus:outline-1 outline-blue-500" />
+      <div className="flex items-center w-full px-2">
+      <div className="relative w-96">
+          <PhMagnifyingGlassLight className='absolute top-0 bottom-0 w-6 h-6 my-auto text-gray-400 left-3' fontSize={24} />
+          <input type="text" placeholder='Qidirish ...' onChange={(event: React.FormEvent<HTMLInputElement>) => setQuery(event.currentTarget.value)} value={query} className="w-full border py-2 pl-10 focus:outline-1 outline-blue-500" />
+          { query !== '' ? <IconoirCancel onClick={() => setQuery('')} className='absolute cursor-pointer z-10 top-0 bottom-0 w-6 h-6 my-auto hover:bg-slate-100 active:bg-slate-200 text-gray-400 right-2' fontSize={24} /> : '' }
+        </div>
       </div>
       <div>
         <Cats />
@@ -99,7 +102,7 @@ function App() {
         </AnimatePresence>
       </div>
 
-      <ModalRecipe open={open} setOpen={setOpen} />
+      <ModalRecipe />
     </div>
   )
 }

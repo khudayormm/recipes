@@ -7,7 +7,9 @@ interface initialStateProps {
     categories: Category[],
     subcategories: Category[],
     recipes: Recipe[],
-    loading: boolean
+    loading: boolean,
+    open: boolean,
+    showRecipe: Recipe | null
 }
 
 const initialState: initialStateProps = {
@@ -16,7 +18,9 @@ const initialState: initialStateProps = {
     categories: [],
     subcategories: [],
     recipes: [],
-    loading: false
+    loading: false,
+    open: false,
+    showRecipe: null
 }
 
 const categorySlice = createSlice({
@@ -40,10 +44,16 @@ const categorySlice = createSlice({
         },
         changeLoading: (state, action: PayloadAction<boolean>) => {
             state.loading = action.payload
+        },
+        changeModalOpen: (state, action: PayloadAction<boolean>) => {
+            state.open = action.payload
+        },
+        changeShowRecipe: (state, action: PayloadAction<Recipe | null>) => {
+            state.showRecipe = action.payload
         }
     }
 })
 
 
 export default categorySlice.reducer
-export const { changeCategoryId, changeSubCategoryId, changeCategories, changeSubCategories, changeRecipes, changeLoading } = categorySlice.actions
+export const { changeCategoryId, changeSubCategoryId, changeCategories, changeSubCategories, changeRecipes, changeLoading, changeModalOpen, changeShowRecipe } = categorySlice.actions
