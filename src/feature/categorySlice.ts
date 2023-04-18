@@ -9,7 +9,8 @@ interface initialStateProps {
     recipes: Recipe[],
     loading: boolean,
     open: boolean,
-    showRecipe: Recipe | null
+    showRecipe: Recipe | null,
+    show: boolean
 }
 
 const initialState: initialStateProps = {
@@ -20,7 +21,8 @@ const initialState: initialStateProps = {
     recipes: [],
     loading: false,
     open: false,
-    showRecipe: null
+    showRecipe: null,
+    show: false
 }
 
 const categorySlice = createSlice({
@@ -50,10 +52,13 @@ const categorySlice = createSlice({
         },
         changeShowRecipe: (state, action: PayloadAction<Recipe | null>) => {
             state.showRecipe = action.payload
+        },
+        changeShow: (state, action: PayloadAction<boolean>) => {
+            state.show = action.payload
         }
     }
 })
 
 
 export default categorySlice.reducer
-export const { changeCategoryId, changeSubCategoryId, changeCategories, changeSubCategories, changeRecipes, changeLoading, changeModalOpen, changeShowRecipe } = categorySlice.actions
+export const { changeCategoryId, changeSubCategoryId, changeCategories, changeSubCategories, changeRecipes, changeLoading, changeModalOpen, changeShowRecipe, changeShow } = categorySlice.actions

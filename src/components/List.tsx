@@ -14,8 +14,8 @@ function List({ item }: { item: Recipe }) {
     }
 
     return (
-        <div onClick={() => handleShow(item)} className={`border hover:bg-slate-100 cursor-pointer w-[365px] lg:w-[405px] rounded-md my-1.5  flex justify-between items-center`}>
-            <div className="flex flex-row justify-start items-center text-left">
+        <div onClick={() => handleShow(item)} className={`border hover:bg-slate-100 cursor-pointer rounded-md my-1.5  flex justify-between items-center`}>
+            <div className="flex flex-row justify-stretch w-full items-center text-left">
                 <div className="h-20 w-20 flex justify-center items-center ml-1">
                     <img src={item.thumbnail} className="rounded-full w-16 h-16" alt="" />
                 </div>
